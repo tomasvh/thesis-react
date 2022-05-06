@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/application
+    ports:
+      - 3000:3000
+    image: app:react
+    container_name: react-container
+    command: npm start
+    deploy:
+      resources:
+        limits:
+          cpus: 1.0
+          memory: 1024M
