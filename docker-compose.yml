@@ -5,10 +5,9 @@ services:
     volumes:
       - .:/application
     ports:
-      - 3000:3000
+      - 80:8080
     image: app:react
     container_name: react-container
-    command: npm start
     deploy:
       resources:
         limits:
