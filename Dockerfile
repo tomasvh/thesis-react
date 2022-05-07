@@ -1,17 +1,12 @@
-FROM node:17-alpine AS react-builder
-
+FROM node:lts-alpine as react-build-stage
 WORKDIR /app
-
+COPY package*.json ./
+RUN npm install
 COPY . .
+RUN npm run build
 
-RUN npm install && npm run build
-
-FROM nginx:alpine
-
-WORKDIR /usr/share/nginx/html
-
-RUN rm -rf ./*
-
-COPY --from=react-builder /app/build .
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# production stage
+FROM nginx:stable-alpine
+COPY --from=react-build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
